@@ -82,8 +82,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var dropDown = __webpack_require__ (/*! ./dropDown.js */ 1)
-console.log(dropDown)
+var dropDown = __webpack_require__ (/*! ./dropDown */ 1)
 
 registerPlugin(proto(Gem, function(){
 	this.name = 'LikeButton'
@@ -94,7 +93,6 @@ registerPlugin(proto(Gem, function(){
 		var numOfLikes = Text()
 		var whoLiked = Text()
 		var like = Block(text, likeButton, drop = dropDown.dropDown(numOfLikes, whoLiked))
-		// var like = Block(text, likeButton, drop = dropdown.drop(numOfLikes, whoLiked))
 		this.add(like)
 
 		ticket.set('likes', [])
@@ -103,7 +101,7 @@ registerPlugin(proto(Gem, function(){
 		numOfLikes.text = likers.subject.length
 
 		likeButton.on('click', function(){
-			api.User.current().then(function(currentUser){
+			api.User.current().then(function(currentUser){ 
 				var curUserIndex = likers.subject.indexOf(currentUser.subject._id)
 				if(curUserIndex === -1){
 					 // user isn't in list
@@ -120,6 +118,8 @@ registerPlugin(proto(Gem, function(){
 		likers.on('change', function(change){
 			getLikersName()
 			numOfLikes.text = likers.subject.length
+			console.log(numOfLikes.text)
+			console.log(whoLiked.text)
 		})
 
 		// view likers
@@ -141,6 +141,7 @@ registerPlugin(proto(Gem, function(){
 				for(var i=0; i<likers.subject.lenth; i++){
 					if(likers.subject.lenth == 1){
 						whoLiked.text = users[0].displayName()
+						console.log(whoLiked.text)
 					} else if(likers.subject.length == 1){
 						drop.close()
 					} else{
@@ -178,10 +179,17 @@ registerPlugin(proto(Gem, function(){
 /*! all exports used */
 /***/ (function(module, exports) {
 
+//var proto = require('proto')
+ 
+//var Gem = require('gem')
+// var Style = Gem.Style//require('gem/Style')
+// var Block = Gem.Block//require('gem/Block')
 
-// var scrollStyle = Style({
-//     overflowY: 'scroll' // // overflow:auto doesn't work right for some godawful stupid css reason - http://stackoverflow.com/questions/32148519/widthauto-not-working-right-for-absolutely-positioned-div-when-scroll-bar-is-pr#32148618
-// })
+
+
+var scrollStyle = Style({
+    overflowY: 'scroll' // // overflow:auto doesn't work right for some godawful stupid css reason - http://stackoverflow.com/questions/32148519/widthauto-not-working-right-for-absolutely-positioned-div-when-scroll-bar-is-pr#32148618
+})
 
 // A button that can open and close a custom dropdown component
 // emits:
@@ -195,6 +203,7 @@ registerPlugin(proto(Gem, function(){
 // note that in styling this, you can style the menu (using $menu, or its gem selector) as if it were an actual child
 var dropDown = proto(Gem, function(superclass) {
     this.name = 'dropDown'
+    console.log('hey hey')
 
     this.dropdownMenuStyle = Style({
         display: 'block',
@@ -207,8 +216,8 @@ var dropDown = proto(Gem, function(superclass) {
 
         $state: function(state) {
             if(state.height !== undefined) {
-                // return scrollStyle
-                overflow: 'auto'
+                return scrollStyle
+                // overflow: 'auto'
             }
         }
     })
@@ -515,8 +524,11 @@ var getStylePxAmount = function(style, property) {
     return parseInt(text.slice(0,text.length-2), 10)
 }
 
-exports.dropDown = function(){
-    return registerPlugin('dropDown')
+// comment out exports if using original.html
+module.exports = {
+    dropDown: function(){
+        registerPlugin('dropDown')
+    }
 }
 
 /***/ })

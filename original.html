@@ -1,0 +1,105 @@
+<html>
+  <head>
+    <meta charset='utf-8'>
+  </head>
+  <body></body>
+  <script src="node_modules/proto/dist/proto.umd.js"></script>
+  <script src="node_modules/gem/dist/Gem.umd.js"></script>
+  <script src="ExtensionTester.umd.js"></script>
+  <script src="dropDown.js"></script>
+  <script>
+
+      var TestExtension = proto(Gem, function(superclass) {
+          this.name = 'TestExtension'
+
+          this.build = function(ticket, config, api) {
+            
+              var text = Gem.Text(ticket.subject.title)
+              var likeButton = Gem.Image("star.png")
+              var numOfLikes = Gem.Text()
+              var whoLiked = Gem.Text()
+              // var like = Gem.Block(text, likeButton, drop = Dropdown(numOfLikes, whoLiked))
+              var like = Gem.Block(text, likeButton, drop = dropDown(numOfLikes, whoLiked))
+              
+              this.add(like)
+
+              this.style = Gem.Style({
+                  Image: {
+                    cursor: 'pointer',
+                  },
+                  Block: {
+                    border: '1px solid #ccc',
+                    Text: {
+                      display: 'block',
+                      marginBottom: 3
+                    }
+                  }
+              })
+
+              ticket.set('likes', [])
+              
+              var likers = ticket.get("likes")
+              
+              numOfLikes.text = likers.subject.length
+
+              likeButton.on('click', function() {
+                api.User.current().then(function(currentUser) {
+                  var curUserIndex = likers.subject.indexOf(currentUser.subject._id)
+                  if(curUserIndex === -1) {
+                  // user isn't in the list
+                    likers.push(currentUser.subject._id)
+                    likeButton.src = "star1.png"
+                  } else {
+                  // user is in the list
+                    likers.splice(curUserIndex, 1)
+                    likeButton.src = "star.png"
+                  }
+                }).done()
+              })
+              
+              likers.on('change', function(change){
+                getLikersName()
+                numOfLikes.text = likers.subject.length
+              })
+              
+              //-----------View Likers
+              
+              numOfLikes.on('mouseover', function() {
+                drop.open()
+              })
+              numOfLikes.on('mouseout', function() {
+                drop.close()
+              })
+              
+              drop.style = Gem.Style({
+                $menu: {
+                  border: '1px solid blue',
+                  // more menu styles
+                }
+              })
+              
+             //FUNCTION TO GET THE LIKER'S NAME
+              var getLikersName = function(){
+                  api.User.load(likers.subject).then(function(users) {
+                    whoLiked.text = ""
+                      for(var i=0; i<likers.subject.length; i++){
+                        if(likers.subject.length == 1){
+                          whoLiked.text = users[0].displayName()
+                        }else if(likers.subject.length == 1){
+                          drop.close()
+                        }else{
+                          whoLiked.text += users[i].displayName()+", "
+                        }
+                      }
+                  }).done()
+              }
+              
+              getLikersName()
+          }
+      })
+
+      ExtensionTester(TestExtension)
+      
+
+  </script>
+</html>

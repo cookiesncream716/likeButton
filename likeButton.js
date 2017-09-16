@@ -1,5 +1,4 @@
-var dropDown = require ('./dropDown.js')
-console.log(dropDown)
+var dropDown = require ('./dropDown')
 
 registerPlugin(proto(Gem, function(){
 	this.name = 'LikeButton'
@@ -10,7 +9,6 @@ registerPlugin(proto(Gem, function(){
 		var numOfLikes = Text()
 		var whoLiked = Text()
 		var like = Block(text, likeButton, drop = dropDown.dropDown(numOfLikes, whoLiked))
-		// var like = Block(text, likeButton, drop = dropdown.drop(numOfLikes, whoLiked))
 		this.add(like)
 
 		ticket.set('likes', [])
@@ -19,7 +17,7 @@ registerPlugin(proto(Gem, function(){
 		numOfLikes.text = likers.subject.length
 
 		likeButton.on('click', function(){
-			api.User.current().then(function(currentUser){
+			api.User.current().then(function(currentUser){ 
 				var curUserIndex = likers.subject.indexOf(currentUser.subject._id)
 				if(curUserIndex === -1){
 					 // user isn't in list
@@ -36,6 +34,8 @@ registerPlugin(proto(Gem, function(){
 		likers.on('change', function(change){
 			getLikersName()
 			numOfLikes.text = likers.subject.length
+			console.log(numOfLikes.text)
+			console.log(whoLiked.text)
 		})
 
 		// view likers
@@ -57,6 +57,7 @@ registerPlugin(proto(Gem, function(){
 				for(var i=0; i<likers.subject.lenth; i++){
 					if(likers.subject.lenth == 1){
 						whoLiked.text = users[0].displayName()
+						console.log(whoLiked.text)
 					} else if(likers.subject.length == 1){
 						drop.close()
 					} else{

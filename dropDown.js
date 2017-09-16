@@ -1,7 +1,14 @@
+//var proto = require('proto')
+ 
+//var Gem = require('gem')
+// var Style = Gem.Style//require('gem/Style')
+// var Block = Gem.Block//require('gem/Block')
 
-// var scrollStyle = Style({
-//     overflowY: 'scroll' // // overflow:auto doesn't work right for some godawful stupid css reason - http://stackoverflow.com/questions/32148519/widthauto-not-working-right-for-absolutely-positioned-div-when-scroll-bar-is-pr#32148618
-// })
+
+
+var scrollStyle = Style({
+    overflowY: 'scroll' // // overflow:auto doesn't work right for some godawful stupid css reason - http://stackoverflow.com/questions/32148519/widthauto-not-working-right-for-absolutely-positioned-div-when-scroll-bar-is-pr#32148618
+})
 
 // A button that can open and close a custom dropdown component
 // emits:
@@ -15,6 +22,7 @@
 // note that in styling this, you can style the menu (using $menu, or its gem selector) as if it were an actual child
 var dropDown = proto(Gem, function(superclass) {
     this.name = 'dropDown'
+    console.log('hey hey')
 
     this.dropdownMenuStyle = Style({
         display: 'block',
@@ -27,8 +35,8 @@ var dropDown = proto(Gem, function(superclass) {
 
         $state: function(state) {
             if(state.height !== undefined) {
-                // return scrollStyle
-                overflow: 'auto'
+                return scrollStyle
+                // overflow: 'auto'
             }
         }
     })
@@ -335,6 +343,9 @@ var getStylePxAmount = function(style, property) {
     return parseInt(text.slice(0,text.length-2), 10)
 }
 
-exports.dropDown = function(){
-    return registerPlugin('dropDown')
+// comment out exports if using original.html
+module.exports = {
+    dropDown: function(){
+        registerPlugin('dropDown')
+    }
 }
