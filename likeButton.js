@@ -12,19 +12,17 @@ registerPlugin(proto(Gem, function(){
 		this.add(like)
 
 		var likesField = optionsObservee.subject.likesField
-		// console.log('likesField')
-		// console.log(ticket.get(likesField).subject)
 		var likers = []
-		// console.log('likers = ' + likers)
+	
 		if(ticket.get(likesField).subject === undefined){
 			numOfLikes.text = 0
 			ticket.set(likesField, likers)
 		} else{
+			// needs tested
 			numOfLikes.text = ticket.get(likesField).subject.length
 			for(var i=0; i< ticket.get(likesField).subject.length; i++){
 				likers.push(ticket.get(likesField).subject[i])
 			}
-			// console.log('likers2 = ' + likers)
 			getLikersName()
 		}
 
@@ -45,6 +43,9 @@ registerPlugin(proto(Gem, function(){
 					// user is in list 
 					likers.splice(curUserIndex, 1)
 					ticket.set(likesField, likers)
+
+					console.log('splice')
+					console.log(likers)
 					likeButton.src = 'star.png'
 				}
 			}).done()
@@ -72,14 +73,13 @@ registerPlugin(proto(Gem, function(){
 		// })
 
 		var getLikersName = function(){
-			console.log('inside getLikersName')
-			
 			api.User.load(likers).then(function(users){
 				// console.log('users =')
 				// console.log(users)
-				if(users === []){
+				if(likers.length === 0){
 					// console.log('no likes')
 					drop.close()
+					whoLiked.text = ''
 				} else if(users.length === 1){
 					// console.log('1 like')
 					whoLiked.text= users[0].displayName()
