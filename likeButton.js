@@ -3,6 +3,12 @@ var dropDown = require ('./dropDown')
 registerPlugin(proto(Gem, function(){
 	this.name = 'LikeButton'
 
+	this.initialize = function(options){
+		return{
+			likesField: 'likes'
+		}
+	}
+
 	this.build = function(ticket, optionsObservee, api){
 		var text = Text(ticket.subject.title)
 		var likeButton = Image('star.png')

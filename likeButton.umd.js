@@ -87,6 +87,12 @@ var dropDown = __webpack_require__ (/*! ./dropDown */ 1)
 registerPlugin(proto(Gem, function(){
 	this.name = 'LikeButton'
 
+	this.initialize = function(options){
+		return{
+			likesField: 'likes'
+		}
+	}
+
 	this.build = function(ticket, optionsObservee, api){
 		var text = Text(ticket.subject.title)
 		var likeButton = Image('star.png')
@@ -102,7 +108,7 @@ registerPlugin(proto(Gem, function(){
 			numOfLikes.text = 0
 			ticket.set(likesField, likers)
 		} else{
-			// needs tested
+			// needs tested - how do I put ids in to test and get names
 			numOfLikes.text = ticket.get(likesField).subject.length
 			for(var i=0; i< ticket.get(likesField).subject.length; i++){
 				likers.push(ticket.get(likesField).subject[i])
