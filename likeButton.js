@@ -18,7 +18,7 @@ registerPlugin(proto(Gem, function(){
 			numOfLikes.text = 0
 			ticket.set(likesField, likers)
 		} else{
-			// needs tested
+			// needs tested - how do I put ids in to test and get names
 			numOfLikes.text = ticket.get(likesField).subject.length
 			for(var i=0; i< ticket.get(likesField).subject.length; i++){
 				likers.push(ticket.get(likesField).subject[i])
