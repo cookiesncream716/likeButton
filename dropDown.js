@@ -22,7 +22,6 @@ var scrollStyle = Style({
 // note that in styling this, you can style the menu (using $menu, or its gem selector) as if it were an actual child
 var dropDown = proto(Gem, function(superclass) {
     this.name = 'dropDown'
-    console.log('hey hey')
 
     this.dropdownMenuStyle = Style({
         display: 'block',
@@ -344,8 +343,4 @@ var getStylePxAmount = function(style, property) {
 }
 
 // comment out exports if using original.html
-module.exports = {
-    dropDown: function(){
-        registerPlugin('dropDown')
-    }
-}
+module.exports = dropDown

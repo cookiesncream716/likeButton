@@ -6,6 +6,10 @@
   <script src="https://tixit.me/PluginTester.umd.js"></script>
   <script src='likeButton.umd.js'></script>
   <script>
-    PluginTester('LikeButton', {}, {showEditor:true})
+    PluginTester.Api.Ticket.create().then(function(testTicket){
+      // testTicket.subject.likes = ['Heather', 'Rob', 'Clay', 'Brian']
+      PluginTester('LikeButton', {likesField: 'likes'}, {ticketId: testTicket.subject._id,showEditor:true})
+    }).done()
+
   </script>
 </html>

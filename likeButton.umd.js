@@ -91,23 +91,43 @@ registerPlugin(proto(Gem, function(){
 		var text = Text(ticket.subject.title)
 		var likeButton = Image('star.png')
 		var numOfLikes = Text()
-		var whoLiked = Text()
-		var like = Block(text, likeButton, drop = dropDown.dropDown(numOfLikes, whoLiked))
+		var whoLiked = Text('')
+		var like = Block(text, likeButton, drop = dropDown(numOfLikes, whoLiked))
 		this.add(like)
 
-		ticket.set('likes', [])
-
-		var likers = ticket.get('likes')
-		numOfLikes.text = likers.subject.length
+		var likesField = optionsObservee.subject.likesField
+		console.log('likesField')
+		console.log(ticket.get(likesField).subject)
+		// console.log(ticket.get(likesField).subject.length)
+		// var likers = ticket.get(likesField).subject
+		var likers = []
+		console.log('likers = ' + likers)
+		if(ticket.get(likesField).subject === undefined){
+			numOfLikes.text = 0
+			ticket.set(likesField, likers)
+		} else{
+			numOfLikes.text = ticket.get(likesField).subject.length
+			for(var i=0; i< ticket.get(likesField).subject.length; i++){
+				likers.push(ticket.get(likesField).subject[i])
+			}
+			console.log('likers2 = ' + likers)
+		}
 
 		likeButton.on('click', function(){
-			api.User.current().then(function(currentUser){ 
-				var curUserIndex = likers.subject.indexOf(currentUser.subject._id)
+			api.User.current().then(function(curUser){ 
+				// var curUserIndex = likers.subject.indexOf(curUser.subject._id)
+				var curUserIndex = ticket.get(likesField).subject.indexOf(curUser.subject._id)
+				console.log('index ' + curUserIndex)
 				if(curUserIndex === -1){
+					console.log('adding to list')
 					 // user isn't in list
-					 likers.push(currentUser.subject._id)
+					 likers.push(curUser.subject._id)
+					 ticket.set(likesField, likers)
+					 console.log(ticket.get(likesField).subject)
+					 // likers.push(curUser.subject._id)
 					 likeButton.src = 'star1.png'
 				} else{
+					console.log('taking off list')
 					// user is in list
 					likers.splice(curUserIndex, 1)
 					likeButton.src = 'star.png'
@@ -115,12 +135,19 @@ registerPlugin(proto(Gem, function(){
 			}).done()
 		})
 
-		likers.on('change', function(change){
+		ticket.get(likesField).on('change', function(){
+			console.log('change')
 			getLikersName()
-			numOfLikes.text = likers.subject.length
+			numOfLikes.text = ticket.get(likesField).subject.length
 			console.log(numOfLikes.text)
 			console.log(whoLiked.text)
 		})
+		// likers.on('change', function(change){
+		// 	getLikersName()
+		// 	numOfLikes.text = likers.subject.length
+		// 	console.log(numOfLikes.text)
+		// 	console.log(whoLiked.text)
+		// })
 
 		// view likers
 		numOfLikes.on('mouseover', function(){
@@ -136,18 +163,35 @@ registerPlugin(proto(Gem, function(){
 		// })
 
 		var getLikersName = function(){
-			api.User.load(likers.subject).then(function(users){
-				whoLiked.text = ''
-				for(var i=0; i<likers.subject.lenth; i++){
-					if(likers.subject.lenth == 1){
-						whoLiked.text = users[0].displayName()
-						console.log(whoLiked.text)
-					} else if(likers.subject.length == 1){
-						drop.close()
-					} else{
+			console.log('inside getLikersName')
+			
+			api.User.load(likers).then(function(users){
+				console.log('users = ' + users)
+				if(users === ''){
+					console.log('no likes')
+					drop.close()
+				} else if(users.length === 1){
+					console.log('1 like')
+					whoLiked.text= users[0].displayName()
+				} else{
+					console.log('more than 1 like')
+					for(var i=0; i<users.length; i++){
 						whoLiked.text += users[i].displayName() + ', '
 					}
 				}
+				// whoLiked.text = ''
+				// for(var i=0; i<likers.subject.length; i++){
+				// 	if(users.length === 1){
+				// 		whoLiked.text = users[0].displayName()
+				// 		console.log('getting name')
+				// 	} else if(likers.subject.length < 1){
+				// 		console.log('less than 1')
+				// 		drop.close()
+				// 	} else{
+				// 		console.log('else more than 1')
+				// 		whoLiked.text += users[i].displayName() + ', '
+				// 	}
+				// }
 			}).done()
 		}
 
@@ -203,7 +247,6 @@ var scrollStyle = Style({
 // note that in styling this, you can style the menu (using $menu, or its gem selector) as if it were an actual child
 var dropDown = proto(Gem, function(superclass) {
     this.name = 'dropDown'
-    console.log('hey hey')
 
     this.dropdownMenuStyle = Style({
         display: 'block',
@@ -525,11 +568,7 @@ var getStylePxAmount = function(style, property) {
 }
 
 // comment out exports if using original.html
-module.exports = {
-    dropDown: function(){
-        registerPlugin('dropDown')
-    }
-}
+module.exports = dropDown
 
 /***/ })
 /******/ ]);
