@@ -1,11 +1,3 @@
-//var proto = require('proto')
- 
-//var Gem = require('gem')
-// var Style = Gem.Style//require('gem/Style')
-// var Block = Gem.Block//require('gem/Block')
-
-
-
 var scrollStyle = Style({
     overflowY: 'scroll' // // overflow:auto doesn't work right for some godawful stupid css reason - http://stackoverflow.com/questions/32148519/widthauto-not-working-right-for-absolutely-positioned-div-when-scroll-bar-is-pr#32148618
 })
