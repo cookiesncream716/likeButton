@@ -96,12 +96,10 @@ registerPlugin(proto(Gem, function(){
 		this.add(like)
 
 		var likesField = optionsObservee.subject.likesField
-		console.log('likesField')
-		console.log(ticket.get(likesField).subject)
-		// console.log(ticket.get(likesField).subject.length)
-		// var likers = ticket.get(likesField).subject
+		// console.log('likesField')
+		// console.log(ticket.get(likesField).subject)
 		var likers = []
-		console.log('likers = ' + likers)
+		// console.log('likers = ' + likers)
 		if(ticket.get(likesField).subject === undefined){
 			numOfLikes.text = 0
 			ticket.set(likesField, likers)
@@ -110,44 +108,39 @@ registerPlugin(proto(Gem, function(){
 			for(var i=0; i< ticket.get(likesField).subject.length; i++){
 				likers.push(ticket.get(likesField).subject[i])
 			}
-			console.log('likers2 = ' + likers)
+			// console.log('likers2 = ' + likers)
+			getLikersName()
 		}
 
 		likeButton.on('click', function(){
 			api.User.current().then(function(curUser){ 
-				// var curUserIndex = likers.subject.indexOf(curUser.subject._id)
 				var curUserIndex = ticket.get(likesField).subject.indexOf(curUser.subject._id)
-				console.log('index ' + curUserIndex)
+				// console.log('index ' + curUserIndex)
 				if(curUserIndex === -1){
-					console.log('adding to list')
+					// console.log('adding to list')
 					 // user isn't in list
 					 likers.push(curUser.subject._id)
 					 ticket.set(likesField, likers)
-					 console.log(ticket.get(likesField).subject)
+					 // console.log(ticket.get(likesField).subject)
 					 // likers.push(curUser.subject._id)
 					 likeButton.src = 'star1.png'
 				} else{
-					console.log('taking off list')
-					// user is in list
+					// console.log('taking off list')
+					// user is in list 
 					likers.splice(curUserIndex, 1)
+					ticket.set(likesField, likers)
 					likeButton.src = 'star.png'
 				}
 			}).done()
 		})
 
 		ticket.get(likesField).on('change', function(){
-			console.log('change')
+			// console.log('change')
 			getLikersName()
 			numOfLikes.text = ticket.get(likesField).subject.length
-			console.log(numOfLikes.text)
-			console.log(whoLiked.text)
+			// console.log(numOfLikes.text)
+			// console.log(whoLiked.text)
 		})
-		// likers.on('change', function(change){
-		// 	getLikersName()
-		// 	numOfLikes.text = likers.subject.length
-		// 	console.log(numOfLikes.text)
-		// 	console.log(whoLiked.text)
-		// })
 
 		// view likers
 		numOfLikes.on('mouseover', function(){
@@ -166,36 +159,24 @@ registerPlugin(proto(Gem, function(){
 			console.log('inside getLikersName')
 			
 			api.User.load(likers).then(function(users){
-				console.log('users = ' + users)
-				if(users === ''){
-					console.log('no likes')
+				// console.log('users =')
+				// console.log(users)
+				if(users === []){
+					// console.log('no likes')
 					drop.close()
 				} else if(users.length === 1){
-					console.log('1 like')
+					// console.log('1 like')
 					whoLiked.text= users[0].displayName()
 				} else{
-					console.log('more than 1 like')
+					// console.log('more than 1 like')
 					for(var i=0; i<users.length; i++){
 						whoLiked.text += users[i].displayName() + ', '
 					}
 				}
-				// whoLiked.text = ''
-				// for(var i=0; i<likers.subject.length; i++){
-				// 	if(users.length === 1){
-				// 		whoLiked.text = users[0].displayName()
-				// 		console.log('getting name')
-				// 	} else if(likers.subject.length < 1){
-				// 		console.log('less than 1')
-				// 		drop.close()
-				// 	} else{
-				// 		console.log('else more than 1')
-				// 		whoLiked.text += users[i].displayName() + ', '
-				// 	}
-				// }
 			}).done()
 		}
 
-		getLikersName()
+		// getLikersName()
 	}
 
 	this.getStyle = function(){
