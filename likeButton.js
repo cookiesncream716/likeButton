@@ -11,7 +11,7 @@ registerPlugin(proto(Gem, function(){
 
 	this.build = function(ticket, optionsObservee, api){
 		var text = Text(ticket.subject.title)
-		var likeButton = Image('star.png')
+		var likeButton = Image(require('url-loader!./star.png'))
 		var numOfLikes = Text()
 		var whoLiked = Text('')
 		var like = Block(text, likeButton, drop = dropDown(numOfLikes, whoLiked))
@@ -22,7 +22,7 @@ registerPlugin(proto(Gem, function(){
 	
 		if(ticket.get(likesField).subject === undefined){
 			numOfLikes.text = 0
-			ticket.set(likesField, likers)
+			ticket.set('likes', likers)
 		} else{
 			// needs tested - how do I put ids in to test and get names
 			numOfLikes.text = ticket.get(likesField).subject.length
@@ -40,19 +40,19 @@ registerPlugin(proto(Gem, function(){
 					// console.log('adding to list')
 					 // user isn't in list
 					 likers.push(curUser.subject._id)
-					 ticket.set(likesField, likers)
+					 ticket.set('likes', likers)
 					 // console.log(ticket.get(likesField).subject)
 					 // likers.push(curUser.subject._id)
-					 likeButton.src = 'star1.png'
+					 likeButton.src = require('url-loader!./star1.png')
 				} else{
 					// console.log('taking off list')
 					// user is in list 
 					likers.splice(curUserIndex, 1)
-					ticket.set(likesField, likers)
+					ticket.set('likes', likers)
 
 					console.log('splice')
 					console.log(likers)
-					likeButton.src = 'star.png'
+					likeButton.src = require('url-loader!./star.png')
 				}
 			}).done()
 		})

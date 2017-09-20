@@ -70,11 +70,22 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/*!********************************************!*\
+  !*** ./node_modules/url-loader!./star.png ***!
+  \********************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAABE0lEQVR4Ac3LweuLARyA8c/bb7elRslxLZID2i5OykXYhSRONLlsf8JSDtxWCkUObhy5SVJykgsnDu5jkxxYi7Z58/UebK3V+/Y68XnOj3/mUNZfeeA+5e0yN7NTaVeEcFlJFR+9y/pgSynnhK6ecEahmr0OO+2Nr6pZ37x21hH77JBYp29kLlbdADfFqoWxvpXEQPjluguOa6mCqpYTOn/GgYR1PamhAzbtN5Tqwqa2qYlj1h01MdWWo2nkp7qluoWRpgKPTG1ZqvjuoUKfPAennAQvjBXYI1y12xMhPNZwTWjI1RGemUndykr98FQ4L9c9Ibx0EDS9EsJdud777KLEUuKSL97KUXNbzabt7tjmf/Yb2Ttcq8+0JAYAAAAASUVORK5CYII="
+
+/***/ }),
+/* 1 */
 /*!***********************!*\
   !*** ./likeButton.js ***!
   \***********************/
@@ -82,7 +93,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var dropDown = __webpack_require__ (/*! ./dropDown */ 1)
+var dropDown = __webpack_require__ (/*! ./dropDown */ 2)
 
 registerPlugin(proto(Gem, function(){
 	this.name = 'LikeButton'
@@ -95,7 +106,7 @@ registerPlugin(proto(Gem, function(){
 
 	this.build = function(ticket, optionsObservee, api){
 		var text = Text(ticket.subject.title)
-		var likeButton = Image('star.png')
+		var likeButton = Image(__webpack_require__(/*! url-loader!./star.png */ 0))
 		var numOfLikes = Text()
 		var whoLiked = Text('')
 		var like = Block(text, likeButton, drop = dropDown(numOfLikes, whoLiked))
@@ -106,7 +117,7 @@ registerPlugin(proto(Gem, function(){
 	
 		if(ticket.get(likesField).subject === undefined){
 			numOfLikes.text = 0
-			ticket.set(likesField, likers)
+			ticket.set('likes', likers)
 		} else{
 			// needs tested - how do I put ids in to test and get names
 			numOfLikes.text = ticket.get(likesField).subject.length
@@ -124,19 +135,19 @@ registerPlugin(proto(Gem, function(){
 					// console.log('adding to list')
 					 // user isn't in list
 					 likers.push(curUser.subject._id)
-					 ticket.set(likesField, likers)
+					 ticket.set('likes', likers)
 					 // console.log(ticket.get(likesField).subject)
 					 // likers.push(curUser.subject._id)
-					 likeButton.src = 'star1.png'
+					 likeButton.src = __webpack_require__(/*! url-loader!./star1.png */ 3)
 				} else{
 					// console.log('taking off list')
 					// user is in list 
 					likers.splice(curUserIndex, 1)
-					ticket.set(likesField, likers)
+					ticket.set('likes', likers)
 
 					console.log('splice')
 					console.log(likers)
-					likeButton.src = 'star.png'
+					likeButton.src = __webpack_require__(/*! url-loader!./star.png */ 0)
 				}
 			}).done()
 		})
@@ -202,21 +213,13 @@ registerPlugin(proto(Gem, function(){
 }))
 
 /***/ }),
-/* 1 */
+/* 2 */
 /*!*********************!*\
   !*** ./dropDown.js ***!
   \*********************/
 /*! no static exports found */
 /*! all exports used */
 /***/ (function(module, exports) {
-
-//var proto = require('proto')
- 
-//var Gem = require('gem')
-// var Style = Gem.Style//require('gem/Style')
-// var Block = Gem.Block//require('gem/Block')
-
-
 
 var scrollStyle = Style({
     overflowY: 'scroll' // // overflow:auto doesn't work right for some godawful stupid css reason - http://stackoverflow.com/questions/32148519/widthauto-not-working-right-for-absolutely-positioned-div-when-scroll-bar-is-pr#32148618
@@ -556,6 +559,17 @@ var getStylePxAmount = function(style, property) {
 
 // comment out exports if using original.html
 module.exports = dropDown
+
+/***/ }),
+/* 3 */
+/*!*********************************************!*\
+  !*** ./node_modules/url-loader!./star1.png ***!
+  \*********************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAzklEQVR4Ac3NMSuEcRzA8c8Tq3oMMlp043WThV3GMxgspJSXcCmzjAqLjcHiZUgpk8WOS7KxuFz9PMOlPP3v32Pi830BX39moepXzp3R3KyBDzMa2xPCroYmPQnhwYRG1sSoVVmlliVdt2LUja5FLaWanr6ByDTQ1/OtcCDk21f4YcdQSPdpW8KKd5HozTJpHX1R61FbxqWodSHrOXHImBeJ5oy1IVQZOqwaClXWjXUqhCtt0HEthBNj3XuxqQBQ2PLqjrTSkVLdtGNT/rMveWmS+mb4BNsAAAAASUVORK5CYII="
 
 /***/ })
 /******/ ]);
