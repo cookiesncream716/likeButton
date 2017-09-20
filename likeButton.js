@@ -10,6 +10,7 @@ registerPlugin(proto(Gem, function(){
 	}
 
 	this.build = function(ticket, optionsObservee, api){
+		var that = this
 		var text = Text(ticket.subject.title)
 		var likeButton = Image(require('url-loader!./star.png'))
 		var numOfLikes = Text()
@@ -23,17 +24,10 @@ registerPlugin(proto(Gem, function(){
 		// getLikersName()
 		var getLikersName = function(){
 			api.User.load(likers).then(function(users){
-				// console.log('users =')
-				// console.log(users)
 				if(likers.length === 0){
-					// console.log('no likes')
 					drop.close()
 					whoLiked.text = ''
-				} else if(users.length === 1){
-					// console.log('1 like')
-					whoLiked.text= users[0].displayName()
 				} else{
-					// console.log('more than 1 like')
 					for(var i=0; i<users.length; i++){
 						whoLiked.text += users[i].displayName() + ', '
 					}
@@ -53,37 +47,36 @@ registerPlugin(proto(Gem, function(){
 			getLikersName()
 		}
 
+		// get current user and see if he is already in likers
+		api.User.current().then(function(user){
+			that.currentUser = user.subject._id
+		}).done()
+		for(var i=0; i<likers.length; i++){
+			if(that.currentUser === likers[i]){
+				likeButton.src = require('url-loader!./star1.png')
+			}
+		}
+
 		likeButton.on('click', function(){
 			api.User.current().then(function(curUser){ 
 				var curUserIndex = ticket.get(likesField).subject.indexOf(curUser.subject._id)
-				// console.log('index ' + curUserIndex)
 				if(curUserIndex === -1){
-					// console.log('adding to list')
-					 // user isn't in list
+					 // user isn't in list so add
 					 likers.push(curUser.subject._id)
 					 ticket.set('likes', likers)
-					 // console.log(ticket.get(likesField).subject)
-					 // likers.push(curUser.subject._id)
 					 likeButton.src = require('url-loader!./star1.png')
 				} else{
-					// console.log('taking off list')
-					// user is in list 
+					// user is in list so remove
 					likers.splice(curUserIndex, 1)
 					ticket.set('likes', likers)
-
-					console.log('splice')
-					console.log(likers)
 					likeButton.src = require('url-loader!./star.png')
 				}
 			}).done()
 		})
 
 		ticket.get(likesField).on('change', function(){
-			// console.log('change')
 			getLikersName()
 			numOfLikes.text = ticket.get(likesField).subject.length
-			// console.log(numOfLikes.text)
-			// console.log(whoLiked.text)
 		})
 
 		// view likers

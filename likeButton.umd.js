@@ -70,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -86,6 +86,17 @@ module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABK
 
 /***/ }),
 /* 1 */
+/*!*********************************************!*\
+  !*** ./node_modules/url-loader!./star1.png ***!
+  \*********************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAzklEQVR4Ac3NMSuEcRzA8c8Tq3oMMlp043WThV3GMxgspJSXcCmzjAqLjcHiZUgpk8WOS7KxuFz9PMOlPP3v32Pi830BX39moepXzp3R3KyBDzMa2xPCroYmPQnhwYRG1sSoVVmlliVdt2LUja5FLaWanr6ByDTQ1/OtcCDk21f4YcdQSPdpW8KKd5HozTJpHX1R61FbxqWodSHrOXHImBeJ5oy1IVQZOqwaClXWjXUqhCtt0HEthBNj3XuxqQBQ2PLqjrTSkVLdtGNT/rMveWmS+mb4BNsAAAAASUVORK5CYII="
+
+/***/ }),
+/* 2 */
 /*!***********************!*\
   !*** ./likeButton.js ***!
   \***********************/
@@ -93,7 +104,7 @@ module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABK
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-var dropDown = __webpack_require__ (/*! ./dropDown */ 2)
+var dropDown = __webpack_require__ (/*! ./dropDown */ 3)
 
 registerPlugin(proto(Gem, function(){
 	this.name = 'LikeButton'
@@ -105,6 +116,7 @@ registerPlugin(proto(Gem, function(){
 	}
 
 	this.build = function(ticket, optionsObservee, api){
+		var that = this
 		var text = Text(ticket.subject.title)
 		var likeButton = Image(__webpack_require__(/*! url-loader!./star.png */ 0))
 		var numOfLikes = Text()
@@ -118,17 +130,10 @@ registerPlugin(proto(Gem, function(){
 		// getLikersName()
 		var getLikersName = function(){
 			api.User.load(likers).then(function(users){
-				// console.log('users =')
-				// console.log(users)
 				if(likers.length === 0){
-					// console.log('no likes')
 					drop.close()
 					whoLiked.text = ''
-				} else if(users.length === 1){
-					// console.log('1 like')
-					whoLiked.text= users[0].displayName()
 				} else{
-					// console.log('more than 1 like')
 					for(var i=0; i<users.length; i++){
 						whoLiked.text += users[i].displayName() + ', '
 					}
@@ -148,37 +153,36 @@ registerPlugin(proto(Gem, function(){
 			getLikersName()
 		}
 
+		// get current user and see if he is already in likers
+		api.User.current().then(function(user){
+			that.currentUser = user.subject._id
+		}).done()
+		for(var i=0; i<likers.length; i++){
+			if(that.currentUser === likers[i]){
+				likeButton.src = __webpack_require__(/*! url-loader!./star1.png */ 1)
+			}
+		}
+
 		likeButton.on('click', function(){
 			api.User.current().then(function(curUser){ 
 				var curUserIndex = ticket.get(likesField).subject.indexOf(curUser.subject._id)
-				// console.log('index ' + curUserIndex)
 				if(curUserIndex === -1){
-					// console.log('adding to list')
-					 // user isn't in list
+					 // user isn't in list so add
 					 likers.push(curUser.subject._id)
 					 ticket.set('likes', likers)
-					 // console.log(ticket.get(likesField).subject)
-					 // likers.push(curUser.subject._id)
-					 likeButton.src = __webpack_require__(/*! url-loader!./star1.png */ 3)
+					 likeButton.src = __webpack_require__(/*! url-loader!./star1.png */ 1)
 				} else{
-					// console.log('taking off list')
-					// user is in list 
+					// user is in list so remove
 					likers.splice(curUserIndex, 1)
 					ticket.set('likes', likers)
-
-					console.log('splice')
-					console.log(likers)
 					likeButton.src = __webpack_require__(/*! url-loader!./star.png */ 0)
 				}
 			}).done()
 		})
 
 		ticket.get(likesField).on('change', function(){
-			// console.log('change')
 			getLikersName()
 			numOfLikes.text = ticket.get(likesField).subject.length
-			// console.log(numOfLikes.text)
-			// console.log(whoLiked.text)
 		})
 
 		// view likers
@@ -212,7 +216,7 @@ registerPlugin(proto(Gem, function(){
 }))
 
 /***/ }),
-/* 2 */
+/* 3 */
 /*!*********************!*\
   !*** ./dropDown.js ***!
   \*********************/
@@ -558,17 +562,6 @@ var getStylePxAmount = function(style, property) {
 
 // comment out exports if using original.html
 module.exports = dropDown
-
-/***/ }),
-/* 3 */
-/*!*********************************************!*\
-  !*** ./node_modules/url-loader!./star1.png ***!
-  \*********************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports) {
-
-module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAzklEQVR4Ac3NMSuEcRzA8c8Tq3oMMlp043WThV3GMxgspJSXcCmzjAqLjcHiZUgpk8WOS7KxuFz9PMOlPP3v32Pi830BX39moepXzp3R3KyBDzMa2xPCroYmPQnhwYRG1sSoVVmlliVdt2LUja5FLaWanr6ByDTQ1/OtcCDk21f4YcdQSPdpW8KKd5HozTJpHX1R61FbxqWodSHrOXHImBeJ5oy1IVQZOqwaClXWjXUqhCtt0HEthBNj3XuxqQBQ2PLqjrTSkVLdtGNT/rMveWmS+mb4BNsAAAAASUVORK5CYII="
 
 /***/ })
 /******/ ]);
