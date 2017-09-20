@@ -19,7 +19,28 @@ registerPlugin(proto(Gem, function(){
 
 		var likesField = optionsObservee.subject.likesField
 		var likers = []
-	
+
+		// getLikersName()
+		var getLikersName = function(){
+			api.User.load(likers).then(function(users){
+				// console.log('users =')
+				// console.log(users)
+				if(likers.length === 0){
+					// console.log('no likes')
+					drop.close()
+					whoLiked.text = ''
+				} else if(users.length === 1){
+					// console.log('1 like')
+					whoLiked.text= users[0].displayName()
+				} else{
+					// console.log('more than 1 like')
+					for(var i=0; i<users.length; i++){
+						whoLiked.text += users[i].displayName() + ', '
+					}
+				}
+			}).done()
+		}
+
 		if(ticket.get(likesField).subject === undefined){
 			numOfLikes.text = 0
 			ticket.set('likes', likers)
@@ -77,28 +98,6 @@ registerPlugin(proto(Gem, function(){
 		// 		border: '1px solid blue'
 		// 	}
 		// })
-
-		var getLikersName = function(){
-			api.User.load(likers).then(function(users){
-				// console.log('users =')
-				// console.log(users)
-				if(likers.length === 0){
-					// console.log('no likes')
-					drop.close()
-					whoLiked.text = ''
-				} else if(users.length === 1){
-					// console.log('1 like')
-					whoLiked.text= users[0].displayName()
-				} else{
-					// console.log('more than 1 like')
-					for(var i=0; i<users.length; i++){
-						whoLiked.text += users[i].displayName() + ', '
-					}
-				}
-			}).done()
-		}
-
-		// getLikersName()
 	}
 
 	this.getStyle = function(){
