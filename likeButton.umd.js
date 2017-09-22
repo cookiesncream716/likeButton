@@ -128,22 +128,6 @@ registerPlugin(proto(Gem, function(){
 		var likesField = optionsObservee.subject.likesField
 		this.likers = []
 
-		// // getLikersName()
-		// var getLikersName = function(){
-		// 	api.User.load(likers).then(function(users){
-		// 		console.log('users = ')
-		// 		console.log(users)
-		// 		if(likers.length === 0){
-		// 			drop.close()
-		// 			whoLiked.text = ''
-		// 		} else{
-		// 			for(var i=0; i<users.length; i++){
-		// 				whoLiked.text += users[i].displayName() + ', '
-		// 			}
-		// 		}
-		// 	}).done()
-		// }
-
 		if(ticket.get(likesField).subject === undefined){
 			console.log('1 - likesField was undefined')
 			numOfLikes.text = 0
@@ -155,6 +139,8 @@ registerPlugin(proto(Gem, function(){
 			// needs tested - how do I put ids in to test and get names
 			numOfLikes.text = ticket.get(likesField).subject.length
 			console.log('1.3.1  - numOfLikes=')
+			// BUG
+			// why is this an object and not text????? 
 			console.log(numOfLikes)
 			for(var i=0; i< ticket.get(likesField).subject.length; i++){
 				this.likers.push(ticket.get(likesField).subject[i])
@@ -201,7 +187,8 @@ registerPlugin(proto(Gem, function(){
 
 		ticket.get(likesField).on('change', function(){
 			console.log('3 - on change')
-			// why is ticket.get(likesField).subject undefined
+			// BUG
+			// why is ticket.get(likesField).subject undefined???????
 			console.log(ticket.get(likesField).subject)
 			that.getLikersName()
 			numOfLikes.text = ticket.get(likesField).subject.length
@@ -221,7 +208,6 @@ registerPlugin(proto(Gem, function(){
 		// })
 	}
 
-	// getLikersName()
 	this.getLikersName = function(){
 		var that = this
 		this.api.User.load(this.likers).then(function(users){
