@@ -12,11 +12,10 @@ registerPlugin(proto(Gem, function(){
 	this.build = function(ticket, optionsObservee, api){
 		var that = this
 		this.api = api
-		var text = Text(ticket.subject.title)
 		var likeButton = Image(require('url-loader!./star.png'))
 		var numOfLikes = Text()
 		this.whoLiked = Text('')
-		var like = Block(text, likeButton, drop = dropDown(numOfLikes, this.whoLiked))
+		var like = Block(likeButton, drop = dropDown(numOfLikes, this.whoLiked))
 		this.add(like)
 
 		var likesField = optionsObservee.subject.likesField
