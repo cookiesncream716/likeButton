@@ -2,7 +2,7 @@
 	"name": "likeButton",
 	"description": "plugin for Tixit with a like button",
 	"dependencies": {
-		"build-modules": "^2.1.0"
+		"build-modules": "^2.2.0"
 	},
 	"devDependencies": {
 		"url-loader": "^0.5.9"
