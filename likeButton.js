@@ -31,9 +31,7 @@ registerPlugin(proto(Gem, function(){
 				that.currentUser = user.subject._id
 			}).done()
 			for(var i=0; i<ticket.get(this.likesField).subject.length; i++){
-				console.log('checking for user')
 				if(that.currentUser === ticket.get(this.likesField).subject[i]){
-					console.log('user in list')
 					likeButton.src = require('url-loader!./star1.png')
 				}
 			}
