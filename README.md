@@ -1,5 +1,5 @@
 # Tixit: likeButton
-This is a plugin for [Tixit](https://tixit.me/) that allows users to like tickets. This information could be used to give certian tickets a higher priority to complete. In addition to being able to like a ticket, the user can see how many and which users have liked a ticket. The plugin has a configuration option used to store a list of user id's who have liked the ticket.
+This is a plugin for [Tixit](https://tixit.me/) that allows users to 'like' a ticket. This could allow team members to vote that a ticket should have a higher priority or that the ticket's contents are particularly well designed, or maybe just simple appreciation. The plugin also can show which users have liked the ticket. This plugin stores a list of user ids that have marked the ticket as 'liked'.
 
 To use the likeButton plugin on Tixit, go into the Ticket Settings and choose `Edit Layouts`. Create a layout with likeButton added. Next, the plugin will need to be configured correctly. Go back to the Ticket Settings and choose `Edit Shemas`. Click `Add new schema` and then `Add Field`. Give it the following properties:
 ```
