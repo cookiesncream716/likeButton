@@ -1,6 +1,6 @@
 # Tixit: likeButton
 
-![Example of LikeButton](https://github.com/cookiesncream716/likeButton/blob/master/LikeButton.png?raw=true)
+![Example of LikeButton](https://github.com/cookiesncream716/likeButton/blob/master/LikeButton.jpg?raw=true)
 
 This is a plugin for [Tixit](https://tixit.me/) that allows users to like tickets. This information could be used to give certian tickets a higher priority to complete. In addition to being able to like a ticket, the user can see how many and which users have liked a ticket. The plugin has a configuration option used to store a list of user id's who have liked the ticket.
 
