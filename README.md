@@ -3,7 +3,7 @@ This is a plugin for [Tixit](https://tixit.me/) that allows users to like ticket
 
 ![Example of LikeButton](https://github.com/cookiesncream716/likeButton/blob/master/LikeButton.png?raw=true)
 
-To use the likeButton plugin on Tixit, go into the Ticket Settings and choose `Edit Layouts`. Create a layout with likeButton added. Next, the plugin will need to be configured correctly. Go back to the Ticket Settings and choose `Edit Shemas`. Click `Add new schema` and then `Add Field`. Give it the following properties:
+To use the likeButton plugin on Tixit, go into the Ticket Settings and choose `Edit Layouts`. Create a layout with likeButton added to it. Next, the plugin schema will need to be configured correctly. LikeButton has a default configuration field `likesField` that is named `likes`. Go back to the Ticket Settings and choose `Edit Shemas`. Click `Add new schema` and then `Add Field`. Give it the following properties:
 ```
 Name - likes
 Type - choice
