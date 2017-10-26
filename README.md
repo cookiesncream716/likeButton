@@ -25,4 +25,4 @@ How to submit a pull request
 5. Submit a pull request: [http://help.github.com/articles/creating-a-pull-request](http://help.github.com/articles/creating-a-pull-request)
 
 ### License
-Released under the MIT license: [http://opensource.org/license/MIT](http://opensource.org/license/MIT)
+Released under the MIT license: [https://opensource.org/licenses/MIT](https://opensource.org/licenses/MIT)
