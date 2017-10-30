@@ -27,17 +27,18 @@ registerPlugin(proto(Gem, function(){
 		} else{
 			numOfLikes.text = ticket.get(this.likesField).subject.length
 			// get current user and see if already in likers
-			api.User.current().then(function(user){
-				that.currentUser = user.subject._id
-			}).done()
+			// api.User.current().then(function(user){
+			// 	that.currentUser = user.subject._id
+			// }).done()
 			for(var i=0; i<ticket.get(this.likesField).subject.length; i++){
-				if(that.currentUser === ticket.get(this.likesField).subject[i]){
+				if(api.User.current() === ticket.get(this.likesField).subject[i]){
 					likeButton.src = require('url-loader!./star1.png')
+					break
 				}
 			}
 			// get list of names
 			if(ticket.get(this.likesField).subject.length > 0){
-				this.getLikersName()
+				this.getAllLikers()
 			}
 		}
 
@@ -54,13 +55,13 @@ registerPlugin(proto(Gem, function(){
 					likeButton.src = require('url-loader!./star.png')
 					numOfLikes.text = ticket.get(that.likesField).subject.length
 					// not sure if needed if more than 1 liker
-					that.getLikersName()
+					that.getAllLikers()
 				}
 			}).done()
 		})
 
 		ticket.get(this.likesField).on('change', function(){
-			that.getLikersName()
+			that.getAllLikers()
 			numOfLikes.text = ticket.get(that.likesField).subject.length
 		})
 
@@ -73,7 +74,7 @@ registerPlugin(proto(Gem, function(){
 		})
 	}
 
-	this.getLikersName = function(){
+	this.getAllLikers = function(){
 		var that = this
 		this.api.User.load(this.ticket.get(this.likesField).subject).then(function(users){
 			if(users.length === 0 || users === undefined){
