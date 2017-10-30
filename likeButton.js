@@ -27,19 +27,19 @@ registerPlugin(proto(Gem, function(){
 		} else{
 			numOfLikes.text = ticket.get(this.likesField).subject.length
 			// get current user and see if already in likers
-			// api.User.current().then(function(user){
-			// 	that.currentUser = user.subject._id
-			// }).done()
-			for(var i=0; i<ticket.get(this.likesField).subject.length; i++){
-				if(api.User.current() === ticket.get(this.likesField).subject[i]){
-					likeButton.src = require('url-loader!./star1.png')
-					break
+			api.User.current().then(function(user){
+				for(var i=0; i<ticket.get(that.likesField).subject.length; i++){
+					if(user.subject._id === ticket.get(that.likesField).subject[i]){
+						likeButton.src = require('url-loader!./star1.png')
+						break
+					}
 				}
-			}
-			// get list of names
-			if(ticket.get(this.likesField).subject.length > 0){
-				this.getAllLikers()
-			}
+			}).then(function(){
+				// get list of names
+				if(ticket.get(that.likesField).subject.length > 0){
+					return that.getAllLikers()
+				}
+			}).done()
 		}
 
 		likeButton.on('click', function(){
