@@ -1,5 +1,7 @@
 var dropDown = require ('./dropDown')
 
+debugger;
+
 registerPlugin(proto(Gem, function(){
 	this.name = 'LikeButton'
 
@@ -52,6 +54,7 @@ registerPlugin(proto(Gem, function(){
 		// 	}).done()
 		// }
 
+		console.log('likesField ', ticket.get(this.likesField))
 		if(ticket.get(this.likesField).subject.length > 0){
 			// Get current user and see if already in likesField
 			api.User.current().then(function(user){
@@ -103,16 +106,26 @@ registerPlugin(proto(Gem, function(){
 	this.getAllLikers = function(){
 		var that = this
 		this.api.User.load(this.ticket.get(this.likesField).subject).then(function(users){
+			console.log('users = ', users)
 			if(users.length === 0 || users === undefined){
 				drop.close()
 				that.whoLiked.text = ''
-			} else if(users.length === 1){
-				that.whoLiked.text = users[0].displayName()
+			// } else if(users.length === 1){
+			// 	that.whoLiked.text = users[0].displayName()
+			// } else{
+			// 	for(var i=0; i<users.length; i++){
+			// 		that.whoLiked.text += users[i].displayName() + ', '
+			// 	}
 			} else{
-				for(var i=0; i<users.length; i++){
-					that.whoLiked.text += users[i].displayName() + ', '
-				}
+				Users.forEach(function(user, index){
+					if(index === 1){
+						that.whoLiked.text = user.displayName()
+					} else{
+						that.whoLiked.text = ', ' + user.displayName()
+					}
+				})
 			}
+
 		}).done()
 	}
 
