@@ -34,7 +34,6 @@ registerPlugin(proto(Gem, function(){
 		if(ticket.get(this.likesField).subject.length > 0){
 			// Get current user and see if already in likesField
 			api.User.current().then(function(user){
-				console.log('user ', user)
 				var list = 	ticket.get(that.likesField).subject
 				list.forEach(function(name){
 					if(user.subject._id === name){
@@ -59,7 +58,6 @@ registerPlugin(proto(Gem, function(){
 					ticket.get(that.likesField).splice(curUserIndex, 1)
 					likeButton.src = require('url-loader!./star.png')
 					numOfLikes.text = ticket.get(that.likesField).subject.length
-					// not sure if needed if more than 1 liker
 					that.displayAllLikers()
 				}
 			}).done()
@@ -85,12 +83,6 @@ registerPlugin(proto(Gem, function(){
 			if(users.length === 0 || users === undefined){
 				drop.close()
 				that.whoLiked.text = ''
-			// } else if(users.length === 1){
-			// 	that.whoLiked.text = users[0].displayName()
-			// } else{
-			// 	for(var i=0; i<users.length; i++){
-			// 		that.whoLiked.text += users[i].displayName() + ', '
-			// 	}
 			} else{
 				users.forEach(function(user, index){
 					if(index === 0){
