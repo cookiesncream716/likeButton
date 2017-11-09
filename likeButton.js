@@ -96,7 +96,7 @@ registerPlugin(proto(Gem, function(){
 					if(index === 0){
 						that.whoLiked.text = user.displayName()
 					} else{
-						that.whoLiked.text = ', ' + user.displayName()
+						that.whoLiked.text = that.whoLiked.text + ', ' + user.displayName()
 					}
 				})
 			}
