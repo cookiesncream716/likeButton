@@ -1,1 +1,579 @@
-!function(t,e){"object"==typeof exports&&"object"==typeof module?module.exports=e():"function"==typeof define&&define.amd?define([],e):"object"==typeof exports?exports.likeButton=e():t.likeButton=e()}(this,function(){return function(t){function e(o){if(i[o])return i[o].exports;var n=i[o]={i:o,l:!1,exports:{}};return t[o].call(n.exports,n,n.exports,e),n.l=!0,n.exports}var i={};return e.m=t,e.c=i,e.d=function(t,i,o){e.o(t,i)||Object.defineProperty(t,i,{configurable:!1,enumerable:!0,get:o})},e.n=function(t){var i=t&&t.__esModule?function(){return t.default}:function(){return t};return e.d(i,"a",i),i},e.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},e.p="",e(e.s=2)}([function(t,e){t.exports="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAABE0lEQVR4Ac3LweuLARyA8c/bb7elRslxLZID2i5OykXYhSRONLlsf8JSDtxWCkUObhy5SVJykgsnDu5jkxxYi7Z58/UebK3V+/Y68XnOj3/mUNZfeeA+5e0yN7NTaVeEcFlJFR+9y/pgSynnhK6ecEahmr0OO+2Nr6pZ37x21hH77JBYp29kLlbdADfFqoWxvpXEQPjluguOa6mCqpYTOn/GgYR1PamhAzbtN5Tqwqa2qYlj1h01MdWWo2nkp7qluoWRpgKPTG1ZqvjuoUKfPAennAQvjBXYI1y12xMhPNZwTWjI1RGemUndykr98FQ4L9c9Ibx0EDS9EsJdud777KLEUuKSL97KUXNbzabt7tjmf/Yb2Ttcq8+0JAYAAAAASUVORK5CYII="},function(t,e){t.exports="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAzklEQVR4Ac3NMSuEcRzA8c8Tq3oMMlp043WThV3GMxgspJSXcCmzjAqLjcHiZUgpk8WOS7KxuFz9PMOlPP3v32Pi830BX39moepXzp3R3KyBDzMa2xPCroYmPQnhwYRG1sSoVVmlliVdt2LUja5FLaWanr6ByDTQ1/OtcCDk21f4YcdQSPdpW8KKd5HozTJpHX1R61FbxqWodSHrOXHImBeJ5oy1IVQZOqwaClXWjXUqhCtt0HEthBNj3XuxqQBQ2PLqjrTSkVLdtGNT/rMveWmS+mb4BNsAAAAASUVORK5CYII="},function(t,e,i){var o=i(3);registerPlugin(proto(Gem,function(){this.name="LikeButton",this.initialize=function(t){return{likesField:"likes"}},this.requireFields=function(t){var e={};return e[t.likesField]={type:"choice",list:!0,choices:"Users"},e},this.build=function(t,e,n){var r=this;this.api=n,this.ticket=t;var s=Image(i(0)),l=Text(t.get(this.likesField).subject.length);this.whoLiked=Text("");var c=Block(s,drop=o(l,this.whoLiked));this.add(c),this.likesField=e.subject.likesField,console.log("likesField ",t.get(this.likesField)),t.get(this.likesField).subject.length>0&&n.User.current().then(function(e){console.log("user ",e),t.get(r.likesField).subject.forEach(function(t){e.subject._id===t&&(s.src=i(1))})}).then(function(){return r.getAllLikers()}).done(),s.on("click",function(){n.User.current().then(function(e){var o=t.get(r.likesField).subject.indexOf(e.subject._id);-1===o?(t.get(r.likesField).push(e.subject._id),s.src=i(1)):(t.get(r.likesField).splice(o,1),s.src=i(0),l.text=t.get(r.likesField).subject.length,r.getAllLikers())}).done()}),t.get(this.likesField).on("change",function(){r.getAllLikers(),l.text=t.get(r.likesField).subject.length}),l.on("mouseover",function(){drop.open()}),l.on("mouseout",function(){drop.close()})},this.getAllLikers=function(){var t=this;this.api.User.load(this.ticket.get(this.likesField).subject).then(function(e){console.log("users = ",e),0===e.length||void 0===e?(drop.close(),t.whoLiked.text=""):Users.forEach(function(e,i){t.whoLiked.text=1===i?e.displayName():", "+e.displayName()})}).done()},this.getStyle=function(){return Style({Image:{cursor:"pointer"},Block:{border:"1px solid #ccc",Text:{display:"block",marginBottom:3}}})}}))},function(t,e){function i(t,e,i){var n=t.button.domNode.getBoundingClientRect(),r=t.dropdown;if(n.bottom>e.top&&n.top<e.bottom&&n.right>e.left&&n.left<e.right){var s=getComputedStyle(t.dropdown.domNode);o("v",r,s,n,i),o("h",r,s,n,i),r.visible=!0}else t.dropdown.visible=!1}function o(t,e,i,o,n){if("v"===t)var r="bottom",s="top",l="height",c="direction",d="getPotentialHeight",a="scrollHeight",u="clientHeight";else var r="right",s="left",l="width",c="horizontalDirection",d="getPotentialWidth",a="scrollWidth",u="clientWidth";if("v"===t)var p=o[s],f=o[r],g=1;else var p=o[r],f=o[s],g=0;var v=h(i,"margin-"+s),m=h(i,"margin-"+r),b=v+m;if(void 0!==e[d])var A=e[d]();else var A=e.domNode[a];var y=f+A+b-document.documentElement[u],k=A+b-p;if(y<0)var x=1,w=f-g;else if(k<0)var x=-1,w=p-A+g;else if(y<k)var x=1,j=A+m-y,w=f-g;else var x=-1,j=A+v-k,w=j-p+g;e.domNode.style[s]=w+"px",void 0!==j?(n||e.state.subject[l]!==j)&&(e.domNode.style[l]=j+"px",e.state.set(l,j)):(n||void 0!==e.state.subject[l])&&(e.domNode.style[l]="",e.state.set(l,void 0)),(n||e.state.subject[c]!==x)&&e.state.set(c,x)}function n(t,e){var i=t[0],o=t[1];for(var r in o)Object.hasOwnProperty.call(o,r)&&(e&&i[r]instanceof Object&&o[r]instanceof Object?n([i[r],o[r]],!0):i[r]=o[r]);if(t.length>2){return n([i].concat(t.slice(2)),e)}return i}function r(t){return Array.prototype.slice.call(t,0)}var s=Style({overflowY:"scroll"}),l=proto(Gem,function(t){this.name="dropDown",this.dropdownMenuStyle=Style({display:"block",position:"absolute",border:"1px solid black",marginTop:2,padding:2,backgroundColor:"white",zIndex:1e3,$state:function(t){if(void 0!==t.height)return s}}),this.defaultStyle=Style({$setup:function(t,e){var i=c(e.componentStyleMap,t.dropdown);if(i){i=t.dropdownMenuStyle.mix(i).copy();var o=i.componentStyleMap;i.componentStyleMap={},void 0!==t.parent&&u(i.componentStyleMap,t.parent.computedStyleMap),u(i.componentStyleMap,e.componentStyleMap,o)}else i=t.dropdownMenuStyle;t.dropdown.style=i},$kill:function(t){t.dropdown.style=void 0},$wrapper:{display:"block",position:"static"}}),this.build=function(){if(void 0===arguments[0]||"string"==typeof arguments[0])var t=arguments[0],e=1;else var e=0;this.button=arguments[e],this.dropdown=arguments[e+1],this.maintainDropdownPosition=arguments[e+2],void 0===this.maintainDropdownPosition&&(this.maintainDropdownPosition=!0),this.label=t,this.isOpen=!1,this.dropdown.domNode.style.position="absolute",this.button.label="button",this.add(this.button)},this.close=function(){this.isOpen&&(this.isOpen=!1,this.dropdown.detach(),void 0!==this.interval&&clearInterval(this.interval),this.emit("close"))},this.open=function(){if(!this.isOpen){this.isOpen=!0;var t=this,e=p(this.domNode,"y"),o=e.getBoundingClientRect();this.maintainDropdownPosition?this.interval=setInterval(function(){i(t,o)},50):setTimeout(function(){i(t,o)},50),t.dropdown.attach(),t.emit("open")}},this.toggle=function(){this.isOpen?this.close():this.open()}}),c=function(t,e){if(void 0!==t)return d(t,e)||a(t,e)},d=function(t,e){if(void 0!==e.label&&"$"+e.label in t)return t["$"+e.label]},a=function(t,e){for(var i=e.constructor;void 0!==i;){var o=t[i.name];if(void 0!==o)return o;i=i.parent}},u=function(t,e){return n(r(arguments),!1)},p=function(t,e){for(var i=t.parentNode;;){var o=window.getComputedStyle(i).getPropertyValue("overflow-"+e);if(null===i.parentNode||i.parentNode===document||"visible"!==o&&""!==o)break;i=i.parentNode}return i},h=function(t,e){var i=t.getPropertyValue(e);return parseInt(i.slice(0,i.length-2),10)};t.exports=l}])});
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else if(typeof exports === 'object')
+		exports["likeButton"] = factory();
+	else
+		root["likeButton"] = factory();
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/*!********************************************!*\
+  !*** ./node_modules/url-loader!./star.png ***!
+  \********************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAABE0lEQVR4Ac3LweuLARyA8c/bb7elRslxLZID2i5OykXYhSRONLlsf8JSDtxWCkUObhy5SVJykgsnDu5jkxxYi7Z58/UebK3V+/Y68XnOj3/mUNZfeeA+5e0yN7NTaVeEcFlJFR+9y/pgSynnhK6ecEahmr0OO+2Nr6pZ37x21hH77JBYp29kLlbdADfFqoWxvpXEQPjluguOa6mCqpYTOn/GgYR1PamhAzbtN5Tqwqa2qYlj1h01MdWWo2nkp7qluoWRpgKPTG1ZqvjuoUKfPAennAQvjBXYI1y12xMhPNZwTWjI1RGemUndykr98FQ4L9c9Ibx0EDS9EsJdud777KLEUuKSL97KUXNbzabt7tjmf/Yb2Ttcq8+0JAYAAAAASUVORK5CYII="
+
+/***/ }),
+/* 1 */
+/*!*********************************************!*\
+  !*** ./node_modules/url-loader!./star1.png ***!
+  \*********************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAzklEQVR4Ac3NMSuEcRzA8c8Tq3oMMlp043WThV3GMxgspJSXcCmzjAqLjcHiZUgpk8WOS7KxuFz9PMOlPP3v32Pi830BX39moepXzp3R3KyBDzMa2xPCroYmPQnhwYRG1sSoVVmlliVdt2LUja5FLaWanr6ByDTQ1/OtcCDk21f4YcdQSPdpW8KKd5HozTJpHX1R61FbxqWodSHrOXHImBeJ5oy1IVQZOqwaClXWjXUqhCtt0HEthBNj3XuxqQBQ2PLqjrTSkVLdtGNT/rMveWmS+mb4BNsAAAAASUVORK5CYII="
+
+/***/ }),
+/* 2 */
+/*!***********************!*\
+  !*** ./likeButton.js ***!
+  \***********************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+var dropDown = __webpack_require__ (/*! ./dropDown */ 3)
+
+registerPlugin(proto(Gem, function(){
+	this.name = 'LikeButton'
+
+	this.initialize = function(options){
+		return{
+			likesField: 'likes'
+		}
+	}
+
+	this.requireFields = function(options){
+		var result = {}
+		result[options.likesField] = {
+			type: 'choice',
+			list: true,
+			choices: 'Users'
+		}
+		return result
+	}
+
+	this.build = function(ticket, optionsObservee, api){
+		var that = this
+		this.api = api
+		this.ticket = ticket
+		this.likesField = optionsObservee.subject.likesField
+		console.log('likesField ', ticket.get(this.likesField))
+		var likeButton = Image(__webpack_require__(/*! url-loader!./star.png */ 0))
+		var numOfLikes = Text(ticket.get(this.likesField).subject.length)
+		this.whoLiked = Text('')
+		var like = Block(likeButton, drop = dropDown(numOfLikes, this.whoLiked))
+		this.add(like)
+
+		if(ticket.get(this.likesField).subject.length > 0){
+			// Get current user and see if already in likesField
+			api.User.current().then(function(user){
+				console.log('user ', user)
+				var list = 	ticket.get(that.likesField).subject
+				list.forEach(function(name){
+					if(user.subject._id === name){
+						likeButton.src = __webpack_require__(/*! url-loader!./star1.png */ 1)
+					}
+				})
+			}).then(function(){
+				// Get list of names
+				return that.displayAllLikers()
+			}).done()
+		}
+
+		likeButton.on('click', function(){
+			api.User.current().then(function(curUser){
+				var curUserIndex = ticket.get(that.likesField).subject.indexOf(curUser.subject._id)
+				if(curUserIndex === -1){
+					 // user isn't in list so add
+					 ticket.get(that.likesField).push(curUser.subject._id)
+					 likeButton.src = __webpack_require__(/*! url-loader!./star1.png */ 1)
+				} else{
+					// user is in list so remove
+					ticket.get(that.likesField).splice(curUserIndex, 1)
+					likeButton.src = __webpack_require__(/*! url-loader!./star.png */ 0)
+					numOfLikes.text = ticket.get(that.likesField).subject.length
+					// not sure if needed if more than 1 liker
+					that.displayAllLikers()
+				}
+			}).done()
+		})
+
+		ticket.get(this.likesField).on('change', function(){
+			that.displayAllLikers()
+			numOfLikes.text = ticket.get(that.likesField).subject.length
+		})
+
+		// view likers
+		numOfLikes.on('mouseover', function(){
+			drop.open()
+		})
+		numOfLikes.on('mouseout', function(){
+			drop.close()
+		})
+	}
+
+	this.displayAllLikers = function(){
+		var that = this
+		this.api.User.load(this.ticket.get(this.likesField).subject).then(function(users){
+			if(users.length === 0 || users === undefined){
+				drop.close()
+				that.whoLiked.text = ''
+			// } else if(users.length === 1){
+			// 	that.whoLiked.text = users[0].displayName()
+			// } else{
+			// 	for(var i=0; i<users.length; i++){
+			// 		that.whoLiked.text += users[i].displayName() + ', '
+			// 	}
+			} else{
+				users.forEach(function(user, index){
+					if(index === 0){
+						that.whoLiked.text = user.displayName()
+					} else{
+						that.whoLiked.text = ', ' + user.displayName()
+					}
+				})
+			}
+
+		}).done()
+	}
+
+	this.getStyle = function(){
+		return Style({
+			Image: {
+				cursor: 'pointer'
+			},
+			Block: {
+				border: '1px solid #ccc',
+				Text: {
+					display: 'block',
+					marginBottom: 3
+				}
+			}
+		})
+	}
+}))
+
+/***/ }),
+/* 3 */
+/*!*********************!*\
+  !*** ./dropDown.js ***!
+  \*********************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+var scrollStyle = Style({
+    overflowY: 'scroll' // // overflow:auto doesn't work right for some godawful stupid css reason - http://stackoverflow.com/questions/32148519/widthauto-not-working-right-for-absolutely-positioned-div-when-scroll-bar-is-pr#32148618
+})
+
+// A button that can open and close a custom dropdown component
+// emits:
+// open - emitted when the dropdown is opened
+// close - emitted when the dropdown is closed
+// states:
+    // direction - Vertical direction. Can either be 1 or -1. 1 means the menu is displayed below its button, -1 means the menu is displayed above its button.
+    // horizontalDirection - Either 1 or -1. 1 means the menu extends beyond the right side of the button, -1 means the menu extends beyond the left side of the button.
+    // height - Can either be undefined, or a number. If undefined, it means the height is not constrained. If defined, it gives the height in pixels the menu is constrained to.
+    // width - Can either be undefined, or a number. If undefined, it means the width is not constrained. If defined, it gives the width in pixels the menu is constrained to.
+// note that in styling this, you can style the menu (using $menu, or its gem selector) as if it were an actual child
+var dropDown = proto(Gem, function(superclass) {
+    this.name = 'dropDown'
+
+    this.dropdownMenuStyle = Style({
+        display: 'block',
+        position: 'absolute',
+        border: '1px solid black',
+        marginTop: 2,
+        padding: 2,
+        backgroundColor: 'white',
+        zIndex: 1000,
+
+        $state: function(state) {
+            if(state.height !== undefined) {
+                return scrollStyle
+                // overflow: 'auto'
+            }
+        }
+    })
+
+    this.defaultStyle = Style({
+        $setup: function(block, style) {
+            var dropdownStyle = getStyleForComponent(style.componentStyleMap, block.dropdown)
+            if(dropdownStyle) {
+                dropdownStyle = block.dropdownMenuStyle.mix(dropdownStyle).copy()
+
+                // give it the full computed style map it would have it were an actual child
+                var original = dropdownStyle.componentStyleMap
+                dropdownStyle.componentStyleMap = {}
+                if(block.parent !== undefined)
+                    merge(dropdownStyle.componentStyleMap, block.parent.computedStyleMap)
+                merge(dropdownStyle.componentStyleMap, style.componentStyleMap, original)
+
+            } else {
+                dropdownStyle = block.dropdownMenuStyle
+            }
+            block.dropdown.style = dropdownStyle
+        },
+        $kill: function(block) {
+            block.dropdown.style = undefined
+        },
+
+        $wrapper: {
+            display: 'block',
+            position: 'static'
+        }
+    })
+
+    // dropdown - The component to display when the Dropdown is opened. Note that this is mutated by being given the label 'menu'
+        // dropdown.state:direction - set to either 1 if the menu is displayed below the button, and -1 if the menu is displayed above the button
+        // dropdown.state:height - set to the height of the dropdown if the height  needs to be constrained, undefined if it doesn't need to be constrained (this is useful to do things like set 'overflow' to 'scroll' for example)
+        // dropdown.getPotentialHeight() - (optional) If available, called to get the full potential height of the dropdown. If not available, defaults to the dropdown's scrollHeight
+    // maintainDropdownPosition - (default:true) If true, while the dropdown is open, it will be repositioned constantly so that it tracks the movement of the button Component
+    this.build = function(/*[label,]button, dropdown[, maintainDropdownPosition]*/) {
+        if(arguments[0] === undefined || typeof(arguments[0]) === 'string') {
+            var label = arguments[0]
+            var argn = 1
+        } else {
+            var argn = 0
+        }
+
+        this.button = arguments[argn]
+        this.dropdown = arguments[argn+1] // this.dropdown is deprecated
+        this.maintainDropdownPosition = arguments[argn+2]
+        if(this.maintainDropdownPosition === undefined) {
+            this.maintainDropdownPosition = true
+        }
+
+        this.label = label
+        
+        this.isOpen = false
+        
+        this.dropdown.domNode.style.position = 'absolute'
+
+        this.button.label = 'button'
+
+        this.add(this.button) // Block('wrapper', [buttonComponent/*, dropdown])) // wrap it in a container to get around weirdness with parents that have css overflow auto/hidden
+    }
+
+    this.close = function() {
+        if(this.isOpen) {
+            this.isOpen = false
+            this.dropdown.detach()
+            //this.dropdown.visible = false
+            if(this.interval !== undefined) {
+                clearInterval(this.interval)
+            }
+
+            this.emit('close')
+        }
+    }
+
+    this.open = function() {
+        if(!this.isOpen) {
+            this.isOpen = true
+
+            var that = this
+
+            // find the closest component that can obscure the buttonComponent if it scrolls them above its boundaries
+            var overflowView = findOverflowView(this.domNode, 'y')
+            var overflowViewBoundary = overflowView.getBoundingClientRect()
+
+            // menu positioning
+            //repositionMenu(that, overflowViewBoundary, true)  // i guess we don't need this, and it was causing annoying flicker
+            if(this.maintainDropdownPosition) {
+                // only reposition (and make visible) the menu after a return back to the scheduler, cause otherwise it doesn't take the explicit styles into account for some reason
+                this.interval = setInterval(function() {
+                    repositionMenu(that, overflowViewBoundary)
+                },50)
+            } else {
+                // only reposition (and make visible) the menu after a return back to the scheduler, cause otherwise it doesn't take the explicit styles into account for some reason
+                setTimeout(function() {
+                    repositionMenu(that, overflowViewBoundary)
+                },50)
+            }
+
+            that.dropdown.attach()  // attach at the top level so it isn't confined to the boundaries of its parents
+            that.emit('open')
+        }
+    }
+
+    this.toggle = function() {
+        if(this.isOpen) {
+            this.close()
+        } else {
+            this.open()
+        }
+    }
+})
+
+// repositions the dropdown component according to where the button component is on the page
+// overflowViewBoundary -  the boundingClientRect of the block who's boundaries can obscure the buttonComponent
+function repositionMenu(that, overflowViewBoundary, firstRepositioning) {
+    var buffer = 1 // some distance the menu is from the button (not sure why its there, but this helps work around it)
+
+    var buttonBounds = that.button.domNode.getBoundingClientRect()
+    var dropdown = that.dropdown
+
+    if(buttonBounds.bottom > overflowViewBoundary.top && buttonBounds.top < overflowViewBoundary.bottom    // make sure the button is still visible
+       && buttonBounds.right > overflowViewBoundary.left && buttonBounds.left < overflowViewBoundary.right
+    ) {
+        var dropdownStyle = getComputedStyle(that.dropdown.domNode) // is this expensive? Maybe store it as a property on 'that'?
+
+        setDimensionAndPosition('v', dropdown, dropdownStyle,buttonBounds, firstRepositioning)
+        setDimensionAndPosition('h', dropdown, dropdownStyle,buttonBounds, firstRepositioning)
+//        dropdown.domNode.style.left = buttonBounds.left+'px'
+        dropdown.visible = true
+    } else  {
+        that.dropdown.visible = false
+    }
+}
+
+// sets either the height and vertical position or the width and horizontal position, depending on the arguments
+// type - Either "v" or "h"
+// dropdown - The dropdown gem
+// dropdownStyle - A result from getComputedStyle(node)
+// buttonBounds - The BoundingClientRect of the button
+function setDimensionAndPosition(type, dropdown, dropdownStyle, buttonBounds, firstPositioning) {
+    if(type === 'v') {
+        var lower = 'bottom'
+        var upper = 'top'
+        var dimension = 'height'
+        var directionName = 'direction'
+
+        var potentialDimension = 'getPotentialHeight'
+        var scrollDimension = 'scrollHeight'
+        var clientDimension = 'clientHeight'
+    } else {
+        var lower = 'right'
+        var upper = 'left'
+        var dimension = 'width'
+        var directionName = 'horizontalDirection'
+
+        var potentialDimension = 'getPotentialWidth'
+        var scrollDimension = 'scrollWidth'
+        var clientDimension = 'clientWidth'
+    }
+
+    if(type === 'v') {
+        var upperOffset = buttonBounds[upper]
+        var lowerOffset = buttonBounds[lower]
+        var buffer = 1 // some distance the menu is from the button (not sure why its there, but this helps work around it)
+    } else {
+        // these are switched because in the normal case, the dropdown should be pushed right to the distance of the *left* boundary of the button (and vice versa)
+        var upperOffset = buttonBounds[lower]
+        var lowerOffset = buttonBounds[upper]
+        var buffer = 0
+    }
+
+    var dropdownMarginUpper = getStylePxAmount(dropdownStyle, 'margin-'+upper)
+    var dropdownMarginLower = getStylePxAmount(dropdownStyle, 'margin-'+lower)
+
+    var dropdownMargins = dropdownMarginUpper + dropdownMarginLower
+
+    if(dropdown[potentialDimension] !== undefined) {
+        var dropdownDimension = dropdown[potentialDimension]()
+    } else {
+        var dropdownDimension = dropdown.domNode[scrollDimension]
+    }
+
+    var amountCutOffDownward = lowerOffset + dropdownDimension + dropdownMargins - document.documentElement[clientDimension]
+    var amountCutOffUpward = dropdownDimension + dropdownMargins - upperOffset
+
+    if(amountCutOffDownward < 0) { // if its visible by being displayed underneath
+        var direction = 1
+        var newUpper = lowerOffset-buffer
+    } else if(amountCutOffUpward < 0) {  // if its only visible by being displayed upward
+        var direction = -1
+        var newUpper = upperOffset-dropdownDimension+buffer // puts it above rather than below - note that dropdownDimension should be the same as the clientHeight *after* this function runs (which is what we care about here)
+    } else {
+        if(amountCutOffDownward < amountCutOffUpward) { // if you can see more of the dropdown by opening it downward
+            var direction = 1
+            var newDimension = dropdownDimension+dropdownMarginLower - amountCutOffDownward
+            var newUpper = lowerOffset-buffer
+        } else {
+            var direction = -1
+            var newDimension = dropdownDimension+dropdownMarginUpper - amountCutOffUpward
+            var newUpper = newDimension-upperOffset+buffer
+        }
+    }
+
+    dropdown.domNode.style[upper] = newUpper+'px'
+    if(newDimension !== undefined) {
+        if(firstPositioning || dropdown.state.subject[dimension] !== newDimension) {
+            dropdown.domNode.style[dimension] = newDimension+'px'
+            dropdown.state.set(dimension, newDimension)
+        }
+    } else {
+        if(firstPositioning || dropdown.state.subject[dimension] !== undefined) {
+            dropdown.domNode.style[dimension] = ''
+            dropdown.state.set(dimension, undefined)
+        }
+    }
+
+    if(firstPositioning || dropdown.state.subject[directionName] !== direction) {  // don't constantly reset things if they're already that value
+        dropdown.state.set(directionName, direction)
+    }
+}
+
+
+
+// gets the right style from the styleMap, depending on the gem's `name` and `label` (`label` styles take precedence)
+// takes the component's inheritance tree into account (relies on the gem.constructor.parent property)
+var getStyleForComponent = function (styleMap, gem) {
+    if(styleMap === undefined)
+        return undefined
+
+    return getStyleForLabel(styleMap, gem) || getStyleForGemName(styleMap, gem)
+}
+
+var getStyleForLabel = function(styleMap, gem) {
+    if(gem.label !== undefined && '$'+gem.label in styleMap) {
+        return styleMap['$'+gem.label]
+    }
+}
+var getStyleForGemName = function(styleMap, gem) {
+    var constructor = gem.constructor
+    while(constructor !== undefined) {
+        var style = styleMap[constructor.name]
+        if(style !== undefined) {
+            return style
+        } else {
+            constructor = constructor.parent
+        }
+    }
+}
+
+
+// Overwrites obj1's values with obj2's and adds obj2's if non existent in obj1
+// any number of objects can be passed into the function and will be merged into the first argument in order
+// returns obj1 (now mutated)
+var merge = function(obj1, obj2/*, moreObjects...*/){
+    return mergeInternal(arrayify(arguments), false)
+}
+function mergeInternal(objects, deep) {
+    var obj1 = objects[0]
+    var obj2 = objects[1]
+
+    for(var key in obj2){
+       if(Object.hasOwnProperty.call(obj2, key)) {
+            if(deep && obj1[key] instanceof Object && obj2[key] instanceof Object) {
+                mergeInternal([obj1[key], obj2[key]], true)
+            } else {
+                obj1[key] = obj2[key]
+            }
+       }
+    }
+
+    if(objects.length > 2) {
+        var newObjects = [obj1].concat(objects.slice(2))
+        return mergeInternal(newObjects, deep)
+    } else {
+        return obj1
+    }
+}
+
+function arrayify(a) {
+    return Array.prototype.slice.call(a, 0)
+}
+
+
+// returns the closest ancestor dom node that has a non-visible scroll type for the given axis
+// axis - either 'x' or 'y'
+var findOverflowView = function(domNode, axis) {
+    var overflowView = domNode.parentNode
+    while(true) {
+        var overflowStyle = window.getComputedStyle(overflowView).getPropertyValue('overflow-'+axis)
+        if(overflowView.parentNode === null || overflowView.parentNode === document || (overflowStyle !== 'visible' && overflowStyle !== '')) {
+            break;
+        }
+        overflowView = overflowView.parentNode
+    }
+    return overflowView
+}
+
+// style - an object returned from getComputedStyle
+// property - a css property
+var getStylePxAmount = function(style, property) {
+    var text = style.getPropertyValue(property)
+    return parseInt(text.slice(0,text.length-2), 10)
+}
+
+// comment out exports if using original.html
+module.exports = dropDown
+
+/***/ })
+/******/ ]);
+});

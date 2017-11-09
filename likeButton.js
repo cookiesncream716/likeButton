@@ -1,7 +1,5 @@
 var dropDown = require ('./dropDown')
 
-debugger;
-
 registerPlugin(proto(Gem, function(){
 	this.name = 'LikeButton'
 
@@ -25,36 +23,14 @@ registerPlugin(proto(Gem, function(){
 		var that = this
 		this.api = api
 		this.ticket = ticket
+		this.likesField = optionsObservee.subject.likesField
+		console.log('likesField ', ticket.get(this.likesField))
 		var likeButton = Image(require('url-loader!./star.png'))
 		var numOfLikes = Text(ticket.get(this.likesField).subject.length)
 		this.whoLiked = Text('')
 		var like = Block(likeButton, drop = dropDown(numOfLikes, this.whoLiked))
 		this.add(like)
 
-		this.likesField = optionsObservee.subject.likesField
-
-		// if(ticket.get(this.likesField).subject === undefined){
-		// 	numOfLikes.text = 0
-		// 	ticket.set(this.likesField, [])
-		// } else{
-		// 	numOfLikes.text = ticket.get(this.likesField).subject.length
-		// 	// get current user and see if already in likers
-		// 	api.User.current().then(function(user){
-		// 		for(var i=0; i<ticket.get(that.likesField).subject.length; i++){
-		// 			if(user.subject._id === ticket.get(that.likesField).subject[i]){
-		// 				likeButton.src = require('url-loader!./star1.png')
-		// 				break
-		// 			}
-		// 		}
-		// 	}).then(function(){
-		// 		// get list of names
-		// 		if(ticket.get(that.likesField).subject.length > 0){
-		// 			return that.getAllLikers()
-		// 		}
-		// 	}).done()
-		// }
-
-		console.log('likesField ', ticket.get(this.likesField))
 		if(ticket.get(this.likesField).subject.length > 0){
 			// Get current user and see if already in likesField
 			api.User.current().then(function(user){
@@ -67,7 +43,7 @@ registerPlugin(proto(Gem, function(){
 				})
 			}).then(function(){
 				// Get list of names
-				return that.getAllLikers()
+				return that.displayAllLikers()
 			}).done()
 		}
 
@@ -84,13 +60,13 @@ registerPlugin(proto(Gem, function(){
 					likeButton.src = require('url-loader!./star.png')
 					numOfLikes.text = ticket.get(that.likesField).subject.length
 					// not sure if needed if more than 1 liker
-					that.getAllLikers()
+					that.displayAllLikers()
 				}
 			}).done()
 		})
 
 		ticket.get(this.likesField).on('change', function(){
-			that.getAllLikers()
+			that.displayAllLikers()
 			numOfLikes.text = ticket.get(that.likesField).subject.length
 		})
 
@@ -103,10 +79,9 @@ registerPlugin(proto(Gem, function(){
 		})
 	}
 
-	this.getAllLikers = function(){
+	this.displayAllLikers = function(){
 		var that = this
 		this.api.User.load(this.ticket.get(this.likesField).subject).then(function(users){
-			console.log('users = ', users)
 			if(users.length === 0 || users === undefined){
 				drop.close()
 				that.whoLiked.text = ''
@@ -117,8 +92,8 @@ registerPlugin(proto(Gem, function(){
 			// 		that.whoLiked.text += users[i].displayName() + ', '
 			// 	}
 			} else{
-				Users.forEach(function(user, index){
-					if(index === 1){
+				users.forEach(function(user, index){
+					if(index === 0){
 						that.whoLiked.text = user.displayName()
 					} else{
 						that.whoLiked.text = ', ' + user.displayName()
