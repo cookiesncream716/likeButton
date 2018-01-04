@@ -3,20 +3,22 @@ var dropDown = require ('./dropDown')
 registerPlugin(proto(Gem, function(){
 	this.name = 'LikeButton'
 
+	// set plugin configuration
 	this.initialize = function(options){
 		return{
 			likesField: 'likes'
 		}
 	}
 
+	// set ticket fields
 	this.requireFields = function(options){
-		var result = {}
+		var ticketFields = {}
 		result[options.likesField] = {
 			type: 'choice',
 			list: true,
 			choices: 'Users'
 		}
-		return result
+		return ticketFields
 	}
 
 	this.build = function(ticket, optionsObservee, api){
