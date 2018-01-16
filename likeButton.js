@@ -13,7 +13,7 @@ registerPlugin(proto(Gem, function(){
 	// set ticket fields
 	this.requireFields = function(options){
 		var ticketFields = {}
-		result[options.likesField] = {
+		ticketFields[options.likesField] = {
 			type: 'choice',
 			list: true,
 			choices: 'Users'
